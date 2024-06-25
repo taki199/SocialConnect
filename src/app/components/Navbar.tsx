@@ -17,7 +17,7 @@ const Navbar = () => {
         {/*links */}
         <div className="flex gap-6 text-gray-600">
           <Link href="/" className="flex items-center gap-2">
-          <Image src="/home.png" alt="HomePage" width={16} height={16} className="w-4 h-4"/>
+          <Image src="/home.png" alt="HomePage" width={16} height={16} className="w-4 h-4 "/>
           <span>HomePage</span>
           </Link>
           <Link href="/" className="flex items-center gap-2">
