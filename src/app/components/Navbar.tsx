@@ -8,10 +8,10 @@ const Navbar = () => {
   return (
     <div className=" h-24 flex items-center justify-between">
       {/*LEFT */}
-      <div className="md:hidden  lg:block w-[20%] animate-bounce">
-        <Link href="/" className="font-bold text-xl text-warmYellow ">Ark <span className="text-orange-600">X</span><span className="text-red-500"> Connect</span></Link>
+      <div className="md:hidden sm:text-center lg:block w-[20%] animate-bounce">
+  <Link href="/" className="font-bold text-xl text-warmYellow">Ark <span className="text-orange-600">X</span><span className="text-red-500"> Connect</span></Link>
+</div>
 
-      </div>
        {/*Center */}
        <div className="hidden md:flex w-[50%] text-sm items-center justify-between">
         {/*links */}

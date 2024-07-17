@@ -1,6 +1,7 @@
 import Link from "next/link"
 import ProfileCard from "./ProfileCard"
 import Image from "next/image"
+import Ad from "./Ad"
 
 
 const LeftMenu = ({type}:{type:"home"|"profile"}) => {
@@ -57,8 +58,9 @@ const LeftMenu = ({type}:{type:"home"|"profile"}) => {
         <Image src="/settings.png"  alt="" height={20} width={20}/>
         <span>Settings</span>
         </Link>
-        <hr className="border-t-1 border-gray-50 w-36 self-center"/>
+        
       </div>
+      <Ad size="sm"/>
     </div>
   )
 }
