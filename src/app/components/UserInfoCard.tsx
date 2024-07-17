@@ -12,12 +12,12 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
             </div>
             {/* Bottom */}
             <div className='flex flex-col gap-4 text-gray-500'>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center justify-between gap-2'>
                     <span className='text-xl text-black'>Lloyd Fleming</span>
-                    <span className='text-sm'>@Jonathan</span>
+                    <span className='text-sm'><b>@Jonathan</b></span>
                 </div>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Blanditiis magnam quidem sapiente odit aspernatur autem voluptas corrupti!
+                    Blanditiis magnam quidem 
                 </p>
                 <div className='flex items-center gap-2'>
                     <Image src="/map.png" alt='' width={16} height={16} />
