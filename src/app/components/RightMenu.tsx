@@ -1,3 +1,4 @@
+import { User } from "@prisma/client"
 import Ad from "./Ad"
 import Birthdays from "./Birthdays"
 import FriendRequests from "./FriendRequests"
@@ -7,12 +8,12 @@ import UserMediaCard from "./UserMediaCard"
 
 
 
-const RightMenu = ({ userId }: { userId?: string }) => {
+const RightMenu = ({ user }: { user?: User }) => {
   return (
     <div className="flex flex-col gap-6">
-      {userId ? (<>
-        <UserInfoCard userId={userId} />
-        <UserMediaCard userId={userId} />
+      {user ? (<>
+        <UserInfoCard user={user} />
+        <UserMediaCard user={user} />
         
       </>) : null}
       <FriendRequests />
