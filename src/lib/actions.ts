@@ -3,7 +3,7 @@
 import { auth } from "@clerk/nextjs/server"
 
 import prisma from "./client"
-import { notFound } from "next/navigation"
+import { z } from "zod"
 
 export const switchFollow = async(userId:string)=>{
     const{userId:currentUserId}=auth()
@@ -155,3 +155,48 @@ export const acceptFollowRequest = async (userId: string) => {
     }
   };
   
+  export const updateProfile=async(formData:FormData)=>{
+
+    const fields=Object.fromEntries(formData)
+    console.log(fields)
+
+    const Profile = z.object({
+      cover:z.string().optional(),
+      username:z.string().max(50).optional(),
+      surname:z.string().max(250).optional(),
+      desc:z.string().max(60).optional(),
+      city:z.string().max(60).optional(),
+      school:z.string().max(60).optional(),
+      work:z.string().max(60).optional(),
+      website:z.string().max(60).optional(),
+      
+
+    })
+
+    const validatedFields=Profile.safeParse(fields)
+
+    if(!validatedFields.success){
+      console.log(validatedFields.error.flatten().fieldErrors)
+      return "error"
+    }
+    const {userId} = auth();
+
+    if(!userId){
+      throw new Error("You must be logged in to update your profile");
+    }
+
+    try {
+    
+      await prisma.user.update({
+        where:{
+          userId:userId
+          
+        },
+        data:validatedFields.data,
+
+      })
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
