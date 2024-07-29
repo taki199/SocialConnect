@@ -158,11 +158,14 @@ export const acceptFollowRequest = async (userId: string) => {
   export const updateProfile=async(formData:FormData)=>{
 
     const fields=Object.fromEntries(formData)
-    console.log(fields)
+
+    const filteredFields=Object.fromEntries(
+      Object.entries(fields).filter(([_,value])=>value !=="")
+    )
 
     const Profile = z.object({
       cover:z.string().optional(),
-      username:z.string().max(50).optional(),
+      name:z.string().max(50).optional(),
       surname:z.string().max(250).optional(),
       desc:z.string().max(60).optional(),
       city:z.string().max(60).optional(),
@@ -173,7 +176,7 @@ export const acceptFollowRequest = async (userId: string) => {
 
     })
 
-    const validatedFields=Profile.safeParse(fields)
+    const validatedFields=Profile.safeParse(filteredFields)
 
     if(!validatedFields.success){
       console.log(validatedFields.error.flatten().fieldErrors)
