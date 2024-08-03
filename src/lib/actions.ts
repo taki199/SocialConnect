@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import prisma from "./client"
 import { z } from "zod"
+import { revalidatePath } from "next/cache";
 
 export const switchFollow = async(userId:string)=>{
     const{userId:currentUserId}=auth()
@@ -155,13 +156,17 @@ export const acceptFollowRequest = async (userId: string) => {
     }
   };
   
-  export const updateProfile=async(formData:FormData)=>{
-
-    const fields=Object.fromEntries(formData)
-
-    const filteredFields=Object.fromEntries(
-      Object.entries(fields).filter(([_,value])=>value !=="")
-    )
+  export const updateProfile = async (
+    prevState: { success: boolean; error: boolean },
+    payload: { formData: FormData; cover: string }
+  ) => {
+    const { formData, cover } = payload;
+    const fields = Object.fromEntries(formData);
+  
+    const filteredFields = Object.fromEntries(
+      Object.entries(fields).filter(([_, value]) => value !== "")
+    );
+  
 
     const Profile = z.object({
       cover:z.string().optional(),
@@ -176,30 +181,29 @@ export const acceptFollowRequest = async (userId: string) => {
 
     })
 
-    const validatedFields=Profile.safeParse(filteredFields)
+    const validatedFields = Profile.safeParse({ cover, ...filteredFields });
 
-    if(!validatedFields.success){
-      console.log(validatedFields.error.flatten().fieldErrors)
-      return "error"
-    }
-    const {userId} = auth();
-
-    if(!userId){
-      throw new Error("You must be logged in to update your profile");
-    }
-
-    try {
-    
-      await prisma.user.update({
-        where:{
-          userId:userId
-          
-        },
-        data:validatedFields.data,
-
-      })
-      
-    } catch (error) {
-      console.log(error)
-    }
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    return { success: false, error: true };
   }
+
+  const { userId } = auth();
+
+  if (!userId) {
+    return { success: false, error: true };
+  }
+
+  try {
+    await prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: validatedFields.data,
+    });
+    return { success: true, error: false };
+  } catch (err) {
+    console.log(err);
+    return { success: false, error: true };
+  }
+};

@@ -5,9 +5,9 @@ import Link from "next/link"
 
 
 const ProfileCard = async () => {
-  const {userId}=auth()
+  const { userId } = auth();
 
-  if(!userId) return null;
+  if (!userId) return null;
 
   const user = await prisma.user.findFirst({
     where: {
@@ -22,7 +22,7 @@ const ProfileCard = async () => {
     },
   });
 
-  if(!user) return null;
+  if (!user) return null;
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-6">

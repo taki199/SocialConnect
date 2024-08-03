@@ -4,43 +4,76 @@ import { updateProfile } from "@/lib/actions"
 import { User } from "@prisma/client"
 import { CldUploadWidget } from "next-cloudinary"
 import Image from "next/image"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+
+import { useActionState, useState } from "react"
+import UpdateButton from "./UpdateButton"
+
+
 
 
 
 const UpdateUser = ({user}:{user:User}) => {
   const [open , SetOpen]=useState(false)
+  const [cover,setCover]=useState<any>(false)
+  const [state, formAction] = useActionState(updateProfile,{success:false,error:false});
+ 
+
+  const router=useRouter()
+
 
   const handleClose =()=>{
     SetOpen(false)
+    state.success && router.refresh();
 
   }
   return (
     <div>
-      <span className="text-orange-500 text-xs cursor-pointer" onClick={()=>SetOpen(true)}>Update</span>
+      <span className="text-orange-500 text-xs cursor-pointer" 
+      onClick={()=>SetOpen(true)}>
+        Update
+      </span>
       {open && (
         <div className="absolute w-screen h-screen top-0 left-0 bg-black bg-opacity-65 flex items-center justify-center z-50 ">
-        <form action={updateProfile} className="p-12 bg-white rounded-lg shadow-md flex flex-col gap-2 w-full md:w-1/2 xl:w-1/3 relative">
+        <form
+            action={(formData) =>
+              formAction({formData,cover:cover?.secure_url || "" })
+            }
+            className="p-12 bg-white rounded-lg shadow-md flex flex-col gap-2 w-full md:w-1/2 xl:w-1/3 relative"
+          >
         {/* Title */}
         <h1> Update Profile</h1>
         <div className="mt-4 text-xs text-gray-500">
           Use the navbar profile to change avatar or username.
         </div>
         {/* Cover pic Upload */}
-        <CldUploadWidget uploadPreset="<ark connect>">
-  {({ open }) => {
-    return (
-      <div className="flex flex-col gap-4 my-4" onClick={()=>open()}>
+        <CldUploadWidget
+              uploadPreset="connect"
+              onSuccess={(result) => setCover(result.info)}
+            >
+              {({ open }) => {
+      return (
+        <div
+          className="flex flex-col gap-4 my-4"
+          onClick={() => open()}
+        >
           <label htmlFor="">Cover Picture</label>
           <div className="flex items-center gap-2 cursor-pointer">
-            <Image src={user.cover||"./noCover.png"} alt="" width={48} height={32} className="w-12 h-8 rounded-md object-cover"/>
-            <span className="text-xs underline text-gray-600">Change</span>
+            <Image
+              src={user.cover ||"/noCover.png"}
+              alt=""
+              width={48}
+              height={32}
+              className="w-12 h-8 rounded-md object-cover"
+            />
+            <span className="text-xs underline text-gray-600">
+              Change
+            </span>
           </div>
         </div>
-     
-    );
-  }}
-</CldUploadWidget>
+      );
+    }}
+  </CldUploadWidget>
         
         {/* wrapper */}
         <div className="flex flex-wrap justify-between gap-2 xl:gap-4">
@@ -92,15 +125,22 @@ const UpdateUser = ({user}:{user:User}) => {
        
         
           
-        
-        <button className="bg-orange-500 p-2 mt-2 rounded-md text-white">Update</button>
+        <UpdateButton/>
+       
+        {state.success && (
+              <span className="text-green-500">Profile has been updated!</span>
+            )}
+            {state.error && (
+              <span className="text-red-500">Something went wrong!</span>
+            )}
+
         <div className="absolute text-xl right-2 top-2 cursor-pointer  text-red-700 hover:text-orange-600" onClick={()=>handleClose()}>X</div>
         </form>
         
       </div>
     )}
     </div>
-  )
+  );
 }
 
 export default UpdateUser
