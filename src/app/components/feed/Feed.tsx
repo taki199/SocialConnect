@@ -5,7 +5,7 @@ import prisma from "@/lib/client";
 
 const Feed = async ({username}:{username?:string}) => {
   const {userId}=auth()
-  let posts;
+  let posts:any[] =[];
   if(username){
     posts=await prisma.post.findMany({
       where:{
@@ -71,17 +71,12 @@ const Feed = async ({username}:{username?:string}) => {
   
   return (
     <div className="p-4 bg-white rounded-lg shadow-md  flex flex-col gap-12">
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
-    <Post/>
+    {posts.length? (posts?.map(post=>(
+      
+      <Post key={post.id} post={post}/>
+    
+    ))) : "no posts found"}
+    
     </div>
   )
 }
