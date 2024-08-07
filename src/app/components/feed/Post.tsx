@@ -39,7 +39,7 @@ const Post = ({post}:{post:FeedPostType}) => {
         />
       </Suspense>
       <Suspense fallback="Loading...">
-        {/* <Comments postId={post.id} /> */}
+        <Comments postId={post.id} />
       </Suspense>
     </div>
   )
