@@ -81,7 +81,7 @@ const StoryList = ({
               />
               {img ? (
                 <form action={add}>
-                  <button className="text-xs bg-blue-500 p-1 rounded-md text-white">
+                  <button className="text-xs bg-orange-500 p-1 rounded-md text-white">
                     Send
                   </button>
                 </form>

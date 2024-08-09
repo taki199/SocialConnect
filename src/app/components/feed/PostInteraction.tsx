@@ -10,7 +10,7 @@ const PostInteraction = ({
   likes,
   commentNumber,
 }: {
-  postId: string;
+  postId: any;
   likes: string[];
   commentNumber: number;
 }) => {
